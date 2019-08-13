@@ -62,7 +62,18 @@ VA - 8/24/2019 - 2:00 PM-6:00 PM - Walmart, 7373 PEPPERS FERRY BLVD, FAIRLAWN, V
 VA - 8/24/2019 - 2:00 PM-6:00 PM - Walmart, 975 HILTON HEIGHTS RD, CHARLOTTESVILLE, VA 22901`
 
 const testZip = 17325;
-const ResultsArray = [];
+
+const shortZipList = [99611,
+  99701,
+  86001,
+  86004,
+  85017,
+  59715,
+  28607,
+  28779,
+  28779
+]
+
 // // const re = /(?<=12445)\s/
 function matchZipCodes(textToSearch: string) {
   return textToSearch.match(/\d{5,5}/g)
@@ -72,30 +83,37 @@ function filterForUserZip(zipCodeArray, zipCode: string) {
   return zipCodeArray.filter(zip => zip === zipCode);
 }
 
-function handleSearch(textToSearch, zipCode: string) {
+function handleSingleZipSearch(textToSearch, zipCode: string) {
   const zipcodeArray = matchZipCodes(textToSearch);
   return filterForUserZip(zipcodeArray, zipCode);
-
 }
 
-//  here down needs help, i think its convoluted
 
-function useRadiusZipsToMatchToJobs(textToSearch, zipCodeArray) {
-  zipCodeArray.forEach(zip => {
-    let fullAddress;
-    const filteredZipCodes: Array<string> = handleSearch(testString, zip.toString());
-    filteredZipCodes.length ? fullAddress = getFullAddresses(filteredZipCodes) : null
-    return fullAddress;
+function compileFilteredZips(textToSearch, zipCodeArray) {
+  let filteredZips = [];
+  zipCodeArray.forEach(zipCode => {
+    const foundZip = handleSingleZipSearch(textToSearch, zipCode.toString());
+    // TODO assign to a set 
+    foundZip ? filteredZips = [...filteredZips, ...foundZip] : null;
   })
+  return filteredZips;
 }
 
+const testingFilters = compileFilteredZips(testString, shortZipList);
 
-function getFullAddresses(filteredZipCodes) {
-  return filteredZipCodes.map((zipCode) => {
-    const addressRegex = new RegExp(`(?<=\\n).*?${zipCode}`, 'g');
-    const [fullAddress] = testString.match(addressRegex);
-    // Todo, handle doubles:
-    fullAddress.length > 1 ? console.log('double!', zipCode) : console.log('no doubles');
-    return fullAddress;
-  })
+
+console.log(testingFilters);
+
+
+function getFullAddresses() {
+  //  takes list of filtered zipcodes
+
 }
+
+// return filteredZipCodes.map((zipCode) => {
+//   const addressRegex = new RegExp(`(?<=\\n).*?${zipCode}`, 'g');
+//   const [fullAddress] = testString.match(addressRegex);
+//   // Todo, handle doubles:
+//   fullAddress.length > 1 ? console.log('double!', zipCode) : console.log('no doubles');
+//   return fullAddress;
+// })
