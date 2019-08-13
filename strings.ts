@@ -1,4 +1,4 @@
-export const mondayString = `
+const mondayString = `
 AZ - 08/17/2019 - 10:30 AM-4:30 PM - Walmart Supercenter, 5695 Highway 95 N, Lake Havasu City, AZ 86404
 CO - 08/17/2019 - 10:30 AM-4:30 PM - Walmart Supercenter, 1250 E Magnolia St, Fort Collins, CO 80524
 CO - 08/18/2019 - 12:30 PM-6:30 PM - Walmart Supercenter, 1250 E Magnolia St, Fort Collins, CO 80524
@@ -90,7 +90,7 @@ VA - 08/19/2019 - 12:30 PM-6:30 PM - Walmart Neighborhood Mkt, 1720 E Little Cre
 VA - 08/19/2019 - 12:30 PM-6:30 PM - Walmart Neighborhood Mkt, 1832 Kempsville Rd, Virginia Beach, VA 23464
 VA - 08/20/2019 - 12:30 PM-6:30 PM - Walmart Neighborhood Mkt, 3201 Holland Rd, Virginia Beach, VA 23453`
 
-export const testString = `AK - 8/31/2019 - 2:00 PM-6:00 PM - Walmart, 10096 KENAI SPUR HWY, KENAI, AK 99611
+const testString = `AK - 8/31/2019 - 2:00 PM-6:00 PM - Walmart, 10096 KENAI SPUR HWY, KENAI, AK 99611
 AK - 8/31/2019 - 2:00 PM-6:00 PM - Walmart, 537 JOHANSEN EXPY, FAIRBANKS, AK 99701
 AZ - 8/24/2019 - 2:00 PM-6:00 PM - Walmart, 2750 S WOODLANDS VILLAGE BLVD, FLAGSTAFF, AZ 86001
 AZ - 8/31/2019 - 2:00 PM-6:00 PM - Walmart, 2601 E HUNTINGTON DR, FLAGSTAFF, AZ 86004
@@ -135,7 +135,7 @@ VA - 8/24/2019 - 2:00 PM-6:00 PM - Walmart, 7373 PEPPERS FERRY BLVD, FAIRLAWN, V
 VA - 8/24/2019 - 2:00 PM-6:00 PM - Walmart, 975 HILTON HEIGHTS RD, CHARLOTTESVILLE, VA 22901`
 
 
-export const fullEmailTest = `
+const fullEmailTest = `
 AL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ALICEVILLE, , AL 35442
 DE - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, SEAFORD, , DE 19973
 DE - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, SEAFORD, , DE 19973
