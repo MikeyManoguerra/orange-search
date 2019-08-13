@@ -1,35 +1,7 @@
-//  input of things to return
-
-// given a string of text, will search through to find match to input
-// if found return the surrounding 10 words
-
-// import { testString, mondayString, fullEmailTest } from './strings';
 
 (function (document) {
   const $ = document.getElementById.bind(document);
 
-  const emailTest = `
-AL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ALICEVILLE, , AL 35442
-DE - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, SEAFORD, , DE 19973
-DE - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, SEAFORD, , DE 19973
-IL - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, WAUKEGAN, , IL 60085
-IL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, CHICAGO, , IL 60629
-IL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, CHICAGO, , IL 60647
-IL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, LYONS, , IL 60534
-KY - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, STURGIS, , KY 42459
-MD - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, HAGERSTOWN, , MD 21742
-MD - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, BALTIMORE, , MD 21239
-MD - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, HAGERSTOWN, , MD 21742
-MI - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, MIO, , MI 48647
-MI - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, GRAND RAPIDS, , MI 49503
-MI - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, MIO, , MI 48647
-PA - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, SHARON HILL, , PA 19079
-PA - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, SHARON HILL, , PA 19079
-SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ANDERSON, , SC 29624
-SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ELGIN, , SC 29045
-SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, HARDEEVILLE, , SC 29927
-SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, LONGS, , SC 29568
-SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, UNION, , SC 29379`;
   const zipCodesWithin20Miles = [
     '19125', '19122', '19123', '19134',
     '19133', '08102', '19106', '19108',
@@ -81,7 +53,7 @@ SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, UNION, , SC 29379`;
   function matchZipCodes(textToSearch: string) {
     // find sequence of 5 digits
     let match: Array<string>;
-    const regResults = textToSearch.match(/\d{5,5}/g)
+    const regResults = textToSearch.match(/\d{5,5}/g);
     regResults ? match = [...regResults] : match = [];
     return match;
   }
@@ -94,7 +66,6 @@ SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, UNION, , SC 29379`;
     const zipcodeArray = matchZipCodes(textToSearch);
     return filterForUserZip(zipcodeArray, zipCode);
   }
-
 
   function compileFilteredZips(textToSearch: string, zipCodeArray: Array<string>) {
     // create new array of zips within range
@@ -122,46 +93,53 @@ SC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, UNION, , SC 29379`;
 
 
   function handleSearch(locationsString: string, zipArray: Array<string>) {
-    // top level function
+    // top level search function
     const testingFilters = compileFilteredZips(locationsString, zipArray);
     return getFullAddresses(locationsString, testingFilters);
   }
 
-  function assembleLocations(searchResults: Array<string>) {
-    const locations = document.createElement('div');
-    locations.id = 'locations';
+  // DOM manipulation below
+
+  function handleAssembly(locationDiv: HTMLDivElement, searchResults: Array<string>) {
+    // build results html
     searchResults.forEach(loc => {
-      const locationElement = document.createElement('p')
+      const locationElement = document.createElement('p');
       locationElement.textContent = loc;
-      locations.appendChild(locationElement);
+      locationDiv.appendChild(locationElement);
     })
-    document.body.replaceChild(locations , $('locations'));
+    return locationDiv
+  }
+
+  function handleNoResults(locationDiv: HTMLDivElement) {
+    // provide message on no results
+    const locationElement = document.createElement('p');
+    locationElement.textContent = 'No results found';
+    locationDiv.appendChild(locationElement);
+    return locationDiv;
+  }
+
+  function assembleLocations(searchResults: Array<string>) {
+    let locations = document.createElement('div');
+    locations.id = 'locations';
+    searchResults.length ? locations = handleAssembly(locations, searchResults) : locations = handleNoResults(locations);
+    //insert into DOM
+    document.body.replaceChild(locations, $('locations'));
   }
 
   function getInputText() {
+    // cast new type to access .value
     const addressesText = (<HTMLInputElement>document.getElementById('textbox')).value;
-
-  
-    console.log(addressesText)
-    if (addressesText) {
-      return handleSearch(addressesText, zipCodesWithin20Miles);
-    }
-    else {
-      return;
-    }
+    return handleSearch(addressesText, zipCodesWithin20Miles);
   }
 
   function clickTheButton() {
     const button: HTMLButtonElement | null = document.querySelector('button');
-    button.addEventListener('click', event => {
+    button.addEventListener('click', () => {
       const addressesArray = getInputText();
-      console.log('hey, was clikced', addressesArray)
-      addressesArray ? assembleLocations(addressesArray) : assembleLocations([]);
-    })
+      assembleLocations(addressesArray);
+    });
   }
 
-  clickTheButton()
-
-  // console.log(handleSearch(emailTest, zipCodesWithin20Miles));
+  clickTheButton();
 
 }(document));

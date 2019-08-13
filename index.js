@@ -1,11 +1,6 @@
 "use strict";
-//  input of things to return
-// given a string of text, will search through to find match to input
-// if found return the surrounding 10 words
-// import { testString, mondayString, fullEmailTest } from './strings';
 (function (document) {
     var $ = document.getElementById.bind(document);
-    var emailTest = "\nAL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ALICEVILLE, , AL 35442\nDE - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, SEAFORD, , DE 19973\nDE - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, SEAFORD, , DE 19973\nIL - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, WAUKEGAN, , IL 60085\nIL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, CHICAGO, , IL 60629\nIL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, CHICAGO, , IL 60647\nIL - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, LYONS, , IL 60534\nKY - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, STURGIS, , KY 42459\nMD - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, HAGERSTOWN, , MD 21742\nMD - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, BALTIMORE, , MD 21239\nMD - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, HAGERSTOWN, , MD 21742\nMI - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, MIO, , MI 48647\nMI - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, GRAND RAPIDS, , MI 49503\nMI - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, MIO, , MI 48647\nPA - 8/3/2019 - 8:00 AM-2:00 PM - Family Dollar, SHARON HILL, , PA 19079\nPA - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, SHARON HILL, , PA 19079\nSC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ANDERSON, , SC 29624\nSC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, ELGIN, , SC 29045\nSC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, HARDEEVILLE, , SC 29927\nSC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, LONGS, , SC 29568\nSC - 8/3/2019 - 9:00 AM-1:00 PM - Family Dollar, UNION, , SC 29379";
     var zipCodesWithin20Miles = [
         '19125', '19122', '19123', '19134',
         '19133', '08102', '19106', '19108',
@@ -89,38 +84,45 @@
         });
     }
     function handleSearch(locationsString, zipArray) {
-        // top level function
+        // top level search function
         var testingFilters = compileFilteredZips(locationsString, zipArray);
         return getFullAddresses(locationsString, testingFilters);
+    }
+    // DOM manipulation below
+    function handleAssembly(locationDiv, searchResults) {
+        // build results html
+        searchResults.forEach(function (loc) {
+            var locationElement = document.createElement('p');
+            locationElement.textContent = loc;
+            locationDiv.appendChild(locationElement);
+        });
+        return locationDiv;
+    }
+    function handleNoResults(locationDiv) {
+        // provide message on no results
+        var locationElement = document.createElement('p');
+        locationElement.textContent = 'No results found';
+        locationDiv.appendChild(locationElement);
+        return locationDiv;
     }
     function assembleLocations(searchResults) {
         var locations = document.createElement('div');
         locations.id = 'locations';
-        searchResults.forEach(function (loc) {
-            var locationElement = document.createElement('p');
-            locationElement.textContent = loc;
-            locations.appendChild(locationElement);
-        });
+        searchResults.length ? locations = handleAssembly(locations, searchResults) : locations = handleNoResults(locations);
+        //insert into DOM
         document.body.replaceChild(locations, $('locations'));
     }
     function getInputText() {
+        // cast new type to access .value
         var addressesText = document.getElementById('textbox').value;
-        console.log(addressesText);
-        if (addressesText) {
-            return handleSearch(addressesText, zipCodesWithin20Miles);
-        }
-        else {
-            return;
-        }
+        return handleSearch(addressesText, zipCodesWithin20Miles);
     }
     function clickTheButton() {
         var button = document.querySelector('button');
-        button.addEventListener('click', function (event) {
+        button.addEventListener('click', function () {
             var addressesArray = getInputText();
-            console.log('hey, was clikced', addressesArray);
-            addressesArray ? assembleLocations(addressesArray) : assembleLocations([]);
+            assembleLocations(addressesArray);
         });
     }
     clickTheButton();
-    // console.log(handleSearch(emailTest, zipCodesWithin20Miles));
 }(document));
