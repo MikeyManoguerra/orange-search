@@ -67,6 +67,8 @@ const shortZipList = [99611,
   99701,
   86001,
   86004,
+  // 45,
+  // 46656,
   85017,
   59715,
   28607,
@@ -100,20 +102,19 @@ function compileFilteredZips(textToSearch, zipCodeArray) {
 }
 
 const testingFilters = compileFilteredZips(testString, shortZipList);
+const fullAddresses = getFullAddresses(testString, testingFilters);
+// console.log(testingFilters);
+console.log(fullAddresses);
 
 
-console.log(testingFilters);
-
-
-function getFullAddresses() {
+function getFullAddresses(textToSearch, filteredZipCodes) {
   //  takes list of filtered zipcodes
-
+  return filteredZipCodes.map((zipCode) => {
+    let fullAddress;
+    const addressRegex = new RegExp(`(?<=\\n).*?${zipCode}`, 'g');
+    const addressArray = textToSearch.match(addressRegex);
+    // Todo, handle doubles:
+    addressArray ? fullAddress = addressArray[0] : fullAddress = null;
+    return fullAddress;
+  })
 }
-
-// return filteredZipCodes.map((zipCode) => {
-//   const addressRegex = new RegExp(`(?<=\\n).*?${zipCode}`, 'g');
-//   const [fullAddress] = testString.match(addressRegex);
-//   // Todo, handle doubles:
-//   fullAddress.length > 1 ? console.log('double!', zipCode) : console.log('no doubles');
-//   return fullAddress;
-// })
