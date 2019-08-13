@@ -1,7 +1,7 @@
 "use strict";
 (function (document) {
     var $ = document.getElementById.bind(document);
-    var zipCodesWithin20Miles = ['19125',
+    var zipCodesWithin30Miles = ['19125',
         '19122',
         '19123',
         '19134',
@@ -548,7 +548,7 @@
     function getInputText() {
         // cast new type to access .value
         var addressesText = document.getElementById('textbox').value;
-        return handleSearch(addressesText, zipCodesWithin20Miles);
+        return handleSearch(addressesText, zipCodesWithin30Miles);
     }
     function clickTheButton() {
         var button = document.querySelector('button');
