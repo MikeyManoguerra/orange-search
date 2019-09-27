@@ -483,10 +483,9 @@
     // // const re = /(?<=12445)\s/
     function matchZipCodes(textToSearch) {
         // find sequence of 5 digits
-        var match;
+        // empty slice makes a shallow copy
         var regResults = textToSearch.match(/\d{5,5}/g);
-        regResults ? match = regResults.slice() : match = [];
-        return match;
+        return regResults ? regResults.slice() : [];
     }
     function filterForUserZip(zipCodeArray, zipCode) {
         return zipCodeArray.filter(function (zip) { return zip === zipCode; });
@@ -497,13 +496,11 @@
     }
     function compileFilteredZips(textToSearch, zipCodeArray) {
         // create new array of zips within range
-        var filteredZips = [];
-        zipCodeArray.forEach(function (zipCode) {
+        return zipCodeArray.reduce(function (filteredZips, zipCode) {
             var foundZip = handleSingleZipSearch(textToSearch, zipCode);
             // TODO assign to a set 
-            foundZip ? filteredZips = filteredZips.concat(foundZip) : null;
-        });
-        return filteredZips;
+            return foundZip ? filteredZips.concat(foundZip) : null;
+        }, []);
     }
     function getFullAddresses(textToSearch, filteredZipCodes) {
         // take zips within range and get full address from original string

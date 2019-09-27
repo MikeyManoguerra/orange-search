@@ -486,10 +486,9 @@
 
   function matchZipCodes(textToSearch: string) {
     // find sequence of 5 digits
-    let match: Array<string>;
+    // empty slice makes a shallow copy
     const regResults = textToSearch.match(/\d{5,5}/g);
-    regResults ? match = [...regResults] : match = [];
-    return match;
+    return regResults ? regResults.slice() : [];
   }
 
   function filterForUserZip(zipCodeArray: Array<string>, zipCode: string) {
@@ -503,15 +502,12 @@
 
   function compileFilteredZips(textToSearch: string, zipCodeArray: Array<string>) {
     // create new array of zips within range
-    let filteredZips: Array<string> = [];
-    zipCodeArray.forEach(zipCode => {
+    return zipCodeArray.reduce((filteredZips, zipCode) => {
       const foundZip = handleSingleZipSearch(textToSearch, zipCode);
       // TODO assign to a set 
-      foundZip ? filteredZips = [...filteredZips, ...foundZip] : null;
-    })
-    return filteredZips;
+      return foundZip ? [...filteredZips, ...foundZip] : null;
+    }, [])
   }
-
 
   function getFullAddresses(textToSearch: string, filteredZipCodes: Array<string>) {
     // take zips within range and get full address from original string
@@ -525,13 +521,11 @@
     })
   }
 
-
   function handleSearch(locationsString: string, zipArray: Array<string>) {
     // top level search function
     const testingFilters = compileFilteredZips(locationsString, zipArray);
     return getFullAddresses(locationsString, testingFilters);
   }
-
   // DOM manipulation below
 
   function handleAssembly(locationDiv: HTMLDivElement, searchResults: Array<string>) {
