@@ -1,2 +1,1 @@
-right now current location and radius are hardcoded
-perhaps i will change that but it is currently a utility tool.
+Oh jeez its worse then i thought , working on it...
