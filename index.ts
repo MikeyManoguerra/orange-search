@@ -6,7 +6,6 @@
     // find sequence of 5 digits
     // empty slice makes a shallow copy
     const regResults = textToSearch.match(/\d{5,5}/g);
-    console.log(regResults);
 
     return regResults ? regResults.slice() : [];
   }
@@ -35,7 +34,6 @@
       let fullAddress: string;
       const addressRegex = new RegExp(`(?<=\\n).*?${zipCode}`, 'g');
       const addressArray = textToSearch.match(addressRegex);
-      console.log(addressArray);
 
       // Todo, handle doubles:
       addressArray ? fullAddress = addressArray[0] : fullAddress = '';
